@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>ประเมินความพึงพอใจงานซ่อม - Repair Review</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Prompt:wght@400;500;600&family=Sarabun:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --c-bg: #F8FAFC;
+            --c-surface: #FFFFFF;
+            --c-surface2: #F1F5F9;
+            --c-border: #E2E8F0;
+            --c-border2: #CBD5E1;
+
+            --c-primary: #2563EB;
+            --c-primary-light: #EFF6FF;
+            --c-success: #10B981;
+            --c-success-light: #ECFDF5;
+            --c-warning: #F59E0B;
+            --c-warning-light: #FFFBEB;
+            --c-danger: #EF4444;
+            --c-danger-light: #FEF2F2;
+
+            --c-text: #0F172A;
+            --c-text-secondary: #475569;
+            --c-text-muted: #94A3B8;
+
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+
+            --r-sm: 8px;
+            --r-md: 12px;
+            --r-lg: 16px;
+            --r-xl: 24px;
+            --r-full: 9999px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background: var(--c-bg);
+            color: var(--c-text);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* ── LOADING ── */
+        #loading {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(4px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.4s ease;
+        }
+
+        .loader-spinner {
+            width: 44px;
+            height: 44px;
+            border: 3px solid #E2E8F0;
+            border-top-color: var(--c-success);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        #loading p {
+            font-family: 'Kanit', sans-serif;
+            font-size: 0.9rem;
+            color: var(--c-text-secondary);
+            font-weight: 500;
+        }
+
+        /* ── APP HEADER ── */
+        .app-header {
+            position: relative;
+            padding: 40px 20px 70px;
+            text-align: center;
+            background: linear-gradient(180deg, #ECFDF5 0%, #F8FAFC 100%);
+            border-bottom: 1px solid var(--c-border);
+        }
+
+        .badge-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #FFFFFF;
+            border: 1px solid var(--c-border);
+            border-radius: var(--r-full);
+            padding: 6px 14px;
+            font-size: 0.78rem;
+            color: var(--c-success);
+            font-family: 'Kanit', sans-serif;
+            font-weight: 600;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--c-success);
+            border-radius: 50%;
+        }
+
+        .app-header h1 {
+            font-family: 'Kanit', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--c-text);
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+
+        .app-header p {
+            font-size: 0.9rem;
+            color: var(--c-text-secondary);
+        }
+
+        /* ── MAIN CONTAINER ── */
+        .container {
+            max-width: 520px;
+            margin: -40px auto 40px;
+            padding: 0 16px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .card {
+            background: var(--c-surface);
+            border: 1px solid var(--c-border);
+            border-radius: var(--r-xl);
+            padding: 28px 24px;
+            box-shadow: var(--shadow-xl);
+        }
+
+        /* ── TICKET INFO BOX ── */
+        .ticket-info-box {
+            background: #F8FAFC;
+            border: 1px solid var(--c-border);
+            border-radius: var(--r-lg);
+            padding: 18px;
+            margin-bottom: 24px;
+        }
+
+        .tib-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--c-border);
+        }
+
+        .tib-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--c-text-muted);
+            text-transform: uppercase;
+        }
+
+        .tib-id {
+            font-family: 'Kanit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--c-primary);
+            background: var(--c-primary-light);
+            padding: 4px 12px;
+            border-radius: var(--r-full);
+        }
+
+        .info-row {
+            margin-bottom: 10px;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--c-text-muted);
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .info-val {
+            font-size: 0.92rem;
+            color: var(--c-text);
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        .img-after-box {
+            margin-top: 14px;
+            border-radius: var(--r-md);
+            overflow: hidden;
+            border: 1px solid var(--c-border);
+            display: none;
+        }
+
+        .img-after-box img {
+            width: 100%;
+            max-height: 220px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ── SECTION TITLE ── */
+        .section-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--c-warning-light);
+            border-radius: var(--r-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .section-head h3 {
+            font-family: 'Kanit', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--c-text);
+        }
+
+        .section-head p {
+            font-size: 0.82rem;
+            color: var(--c-text-secondary);
+        }
+
+        /* ── STAR RATING CONTAINER ── */
+        .rating-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #F8FAFC;
+            border: 1px solid var(--c-border);
+            border-radius: var(--r-lg);
+            padding: 24px 16px;
+            margin-bottom: 24px;
+        }
+
+        .stars-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .star-btn {
+            background: none;
+            border: none;
+            font-size: 38px;
+            color: #CBD5E1;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            outline: none;
+            padding: 4px;
+            line-height: 1;
+        }
+
+        .star-btn:hover,
+        .star-btn.active {
+            color: #F59E0B;
+            transform: scale(1.15);
+        }
+
+        .rating-text {
+            font-family: 'Kanit', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--c-text-muted);
+            transition: color 0.2s;
+        }
+
+        /* ── FEEDBACK TEXTAREA ── */
+        .field-group {
+            margin-bottom: 24px;
+        }
+
+        .field-group label {
+            display: block;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--c-text-secondary);
+            margin-bottom: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: #F8FAFC;
+            border: 1px solid var(--c-border);
+            border-radius: var(--r-md);
+            font-family: 'Sarabun', sans-serif;
+            font-size: 0.95rem;
+            color: var(--c-text);
+            outline: none;
+            min-height: 100px;
+            resize: vertical;
+            transition: all 0.2s ease;
+        }
+
+        textarea:focus {
+            background: #FFFFFF;
+            border-color: var(--c-primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        /* ── BUTTON ── */
+        .btn {
+            width: 100%;
+            padding: 14px 20px;
+            border: none;
+            border-radius: var(--r-md);
+            font-family: 'Kanit', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+        }
+
+        .btn-success:hover {
+            opacity: 0.95;
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* ── STATUS SCREENS (SUCCESS, REVIEWED, ERROR) ── */
+        .status-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 24px 12px 12px;
+        }
+
+        .status-screen.show {
+            display: flex;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .status-icon-wrap {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 34px;
+            margin-bottom: 20px;
+        }
+
+        .status-icon-success {
+            background: var(--c-success-light);
+            border: 2px solid #A7F3D0;
+            color: var(--c-success);
+        }
+
+        .status-icon-warning {
+            background: var(--c-warning-light);
+            border: 2px solid #FDE68A;
+            color: var(--c-warning);
+        }
+
+        .status-icon-lock {
+            background: #F1F5F9;
+            border: 2px solid var(--c-border);
+            color: var(--c-text-secondary);
+        }
+
+        .status-screen h2 {
+            font-family: 'Kanit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--c-text);
+            margin-bottom: 8px;
+        }
+
+        .status-screen p {
+            color: var(--c-text-secondary);
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            max-width: 320px;
+        }
+
+        .reviewed-result-badge {
+            background: #F8FAFC;
+            border: 1px solid var(--c-border);
+            border-radius: var(--r-md);
+            padding: 12px 24px;
+            font-family: 'Kanit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--c-primary);
+        }
+
+        /* ── MINI LOADER ── */
+        .mini-loader {
+            width: 18px;
+            height: 18px;
+            border: 2.5px solid rgba(255, 255, 255, 0.4);
+            border-top-color: #FFFFFF;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loading">
+        <div class="loader-spinner"></div>
+        <p>กำลังโหลดข้อมูลการแจ้งซ่อม...</p>
+    </div>
+
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="badge-wrap">
+            <div class="badge-dot"></div>
+            Customer Satisfaction Review
+        </div>
+        <h1>ประเมินความพึงพอใจ</h1>
+        <p>ความคิดเห็นของคุณมีคุณค่า ช่วยให้เราพัฒนาบริการให้ดียิ่งขึ้น</p>
+    </header>
+
+    <!-- MAIN -->
+    <main class="container">
+        <div class="card">
+
+            <!-- ── FORM CONTAINER ── -->
+            <div id="reviewFormContainer">
+                
+                <!-- Ticket Info Summary -->
+                <div class="ticket-info-box">
+                    <div class="tib-header">
+                        <span class="tib-label">หมายเลขงานซ่อม</span>
+                        <span class="tib-id" id="ticketId">TK00000</span>
+                    </div>
+
+                    <div class="info-row">
+                        <span class="info-label">ปัญหาที่ได้รับแจ้ง</span>
+                        <div class="info-val" id="tIssue">—</div>
+                    </div>
+
+                    <div class="info-row" style="margin-top:10px;">
+                        <span class="info-label">การดำเนินการแก้ไขของช่าง</span>
+                        <div class="info-val" id="tDetail" style="color:var(--c-text-secondary);">—</div>
+                    </div>
+
+                    <div class="img-after-box" id="imgAfterContainer">
+                        <span class="info-label" style="padding:10px 12px 0;">📸 รูปภาพหลังดำเนินการซ่อมเสร็จสิ้น</span>
+                        <img id="imgAfterView" src="" alt="รูปถ่ายหลังซ่อม">
+                    </div>
+                </div>
+
+                <!-- Rating Section -->
+                <div class="section-head">
+                    <div class="section-icon">⭐</div>
+                    <div>
+                        <h3>ให้คะแนนการบริการ</h3>
+                        <p>แตะดาวเพื่อเลือกระดับความพึงพอใจ</p>
+                    </div>
+                </div>
+
+                <div class="rating-container">
+                    <div class="stars-row">
+                        <button type="button" class="star-btn" data-val="1" onclick="handleStarClick(1, 'ควรปรับปรุง')">★</button>
+                        <button type="button" class="star-btn" data-val="2" onclick="handleStarClick(2, 'พอใช้')">★</button>
+                        <button type="button" class="star-btn" data-val="3" onclick="handleStarClick(3, 'ปานกลาง')">★</button>
+                        <button type="button" class="star-btn" data-val="4" onclick="handleStarClick(4, 'ดี')">★</button>
+                        <button type="button" class="star-btn" data-val="5" onclick="handleStarClick(5, 'ดีมาก')">★</button>
+                    </div>
+                    <div class="rating-text" id="ratingText">กรุณาแตะเลือกดาว</div>
+                </div>
+
+                <!-- Feedback Section -->
+                <div class="field-group">
+                    <label for="txtFeedback">ข้อเสนอแนะเพิ่มเติม (ไม่บังคับ)</label>
+                    <textarea id="txtFeedback" placeholder="บอกความประทับใจ หรือสิ่งที่ต้องการให้ปรับปรุงเพิ่มเติม..."></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <button class="btn btn-success" id="btnSubmit" onclick="submitReview()">
+                    <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
+                        <path d="M2 8l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    ส่งแบบประเมิน
+                </button>
+
+            </div>
+
+            <!-- ── SUCCESS SCREEN ── -->
+            <div class="status-screen" id="successScreen">
+                <div class="status-icon-wrap status-icon-success">🎉</div>
+                <h2>ขอบคุณสำหรับการประเมิน!</h2>
+                <p>ระบบบันทึกคะแนนและความคิดเห็นของคุณเรียบร้อยแล้ว ทุกคำติชมจะนำไปพัฒนาบริการต่อไป</p>
+            </div>
+
+            <!-- ── ALREADY REVIEWED SCREEN ── -->
+            <div class="status-screen" id="reviewedScreen">
+                <div class="status-icon-wrap status-icon-lock">🔒</div>
+                <h2>ประเมินเรียบร้อยแล้ว</h2>
+                <p>Ticket นี้ได้รับการประเมินความพึงพอใจไปแล้ว<br>ไม่สามารถประเมินซ้ำได้</p>
+                <div id="reviewedResult">
+                    <div class="reviewed-result-badge" id="reviewedVal">—</div>
+                </div>
+            </div>
+
+            <!-- ── ERROR SCREEN ── -->
+            <div class="status-screen" id="errorScreen">
+                <div class="status-icon-wrap status-icon-warning">⚠️</div>
+                <h2>ยังไม่สามารถประเมินได้</h2>
+                <p id="errorMsg">งานซ่อมนี้ยังอยู่ในระหว่างดำเนินการ กรุณารอให้ช่างดำเนินการและปิดงานก่อน</p>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxvTT31CljbM8wIKi2jbm8fhFOUdu9MHKnk23jnOhuKQ7sG_32FCEmu3mLgNPqiH_kp_Q/exec';
+
+        let ticketId = '';
+        let selectedRating = 0;
+
+        function showScreen(screenId) {
+            ['reviewFormContainer', 'successScreen', 'reviewedScreen', 'errorScreen'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.style.display = 'none';
+                    el.classList.remove('show');
+                }
+            });
+
+            if (screenId) {
+                const target = document.getElementById(screenId);
+                if (target) {
+                    target.style.display = screenId.endsWith('Screen') ? 'flex' : 'block';
+                    setTimeout(() => target.classList.add('show'), 10);
+                }
+            }
+        }
+
+        async function initApp() {
+            const params = new URLSearchParams(location.search);
+            ticketId = params.get('tid') || 'TK00000';
+            document.getElementById('ticketId').textContent = ticketId;
+
+            try {
+                const res = await fetch(`${API_URL}?action=getTicket&id=${ticketId}`, { redirect: "follow" });
+                const json = await res.json();
+
+                if (!json.success || !json.data) {
+                    hideLoading();
+                    document.getElementById('errorMsg').textContent = 'ไม่พบ Ticket หมายเลขนี้ในระบบ';
+                    showScreen('errorScreen');
+                    return;
+                }
+
+                const d = json.data;
+
+                // ตรวจสอบ: ประเมินแล้ว
+                if (d['Status'] === 'Completed' && d['Rating']) {
+                    hideLoading();
+                    const ratingStr = String(d['Rating']);
+                    const valEl = document.getElementById('reviewedVal');
+                    valEl.textContent = ratingStr;
+                    showScreen('reviewedScreen');
+                    return;
+                }
+
+                // ตรวจสอบ: ยังไม่พร้อมประเมิน
+                if (d['Status'] !== 'Waiting for Review' && d['Status'] !== 'Completed') {
+                    hideLoading();
+                    const statusTh = { 'Open': 'รอช่างรับงาน', 'In Progress': 'ช่างกำลังดำเนินการซ่อม' };
+                    document.getElementById('errorMsg').textContent =
+                        'สถานะปัจจุบัน: "' + (statusTh[d['Status']] || d['Status']) + '"\nกรุณารอให้ช่างดำเนินการปิดงานก่อนทำการประเมิน';
+                    showScreen('errorScreen');
+                    return;
+                }
+
+                // พร้อมประเมิน
+                document.getElementById('tIssue').textContent = d['Issue'] || '—';
+                document.getElementById('tDetail').textContent = d['Fix_Detail'] || 'ไม่มีรายละเอียดเพิ่มเติม';
+                if (d['Img_After'] && d['Img_After'].indexOf('https://') === 0) {
+                    document.getElementById('imgAfterView').src = d['Img_After'];
+                    document.getElementById('imgAfterContainer').style.display = 'block';
+                }
+
+                showScreen('reviewFormContainer');
+
+            } catch (e) {
+                hideLoading();
+                document.getElementById('errorMsg').textContent = 'ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณาลองใหม่อีกครั้ง';
+                showScreen('errorScreen');
+                return;
+            }
+
+            hideLoading();
+        }
+
+        function hideLoading() {
+            const el = document.getElementById('loading');
+            if (el) {
+                el.style.opacity = '0';
+                setTimeout(() => { el.style.display = 'none'; }, 400);
+            }
+        }
+
+        function handleStarClick(val, label) {
+            selectRating(val, label);
+        }
+
+        function selectRating(val, label) {
+            selectedRating = val;
+            const ratingText = document.getElementById('ratingText');
+            ratingText.textContent = val + ' ดาว (' + label + ')';
+            
+            const colorMap = {
+                5: '#10B981',
+                4: '#10B981',
+                3: '#F59E0B',
+                2: '#EF4444',
+                1: '#EF4444'
+            };
+            ratingText.style.color = colorMap[val] || '#F59E0B';
+
+            // Update star highlights
+            const buttons = document.querySelectorAll('.star-btn');
+            buttons.forEach(btn => {
+                const bVal = parseInt(btn.getAttribute('data-val'), 10);
+                if (bVal <= val) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        async function submitReview() {
+            if (!selectedRating) return alert('กรุณาแตะเลือกดาวเพื่อให้คะแนนความพึงพอใจ');
+            const btn = document.getElementById('btnSubmit');
+            btn.disabled = true;
+            btn.innerHTML = '<div class="mini-loader"></div> กำลังส่งแบบประเมิน...';
+
+            const payload = {
+                action: 'submitReview',
+                data: {
+                    ticketId: ticketId,
+                    rating: selectedRating,
+                    feedback: document.getElementById('txtFeedback').value
+                }
+            };
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload),
+                    redirect: "follow"
+                });
+                const json = await res.json();
+
+                if (json.success) {
+                    showScreen('successScreen');
+                } else if (json.error === 'ALREADY_REVIEWED') {
+                    document.getElementById('reviewedVal').textContent = 'ได้รับการประเมินแล้ว';
+                    showScreen('reviewedScreen');
+                } else {
+                    alert('เกิดข้อผิดพลาด: ' + (json.error || 'ไม่สามารถส่งการประเมินได้'));
+                    btn.disabled = false;
+                    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> ส่งแบบประเมิน';
+                }
+            } catch (err) {
+                alert('การเชื่อมต่อขัดข้อง กรุณาลองใหม่อีกครั้ง');
+                btn.disabled = false;
+                btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> ส่งแบบประเมิน';
+            }
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+
+</html>
