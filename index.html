@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>แจ้งซ่อมออนไลน์ - Maintenance Service</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Prompt:wght@400;500;600&family=Sarabun:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <style>
+        :root {
+            --c-bg: #F8FAFC;
+            --c-surface: #FFFFFF;
+            --c-surface2: #F1F5F9;
+            --c-border: #E2E8F0;
+            --c-border2: #CBD5E1;
+            
+            --c-primary: #2563EB;
+            --c-primary-light: #EFF6FF;
+            --c-primary-dark: #1D4ED8;
+            
+            --c-success: #10B981;
+            --c-success-light: #ECFDF5;
+            --c-warning: #F59E0B;
+            --c-warning-light: #FFFBEB;
+            --c-danger: #EF4444;
+            --c-danger-light: #FEF2F2;
+            
+            --c-text: #0F172A;
+            --c-text-secondary: #475569;
+            --c-text-muted: #94A3B8;
+
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 20px -3px rgba(0, 0, 0, 0.08);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+
+            --r-sm: 8px;
+            --r-md: 12px;
+            --r-lg: 16px;
+            --r-xl: 24px;
+            --r-full: 9999px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background: var(--c-bg);
+            color: var(--c-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── LOADING ── */
+        #loading {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(4px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.4s ease;
+        }
+
+        .loader-spinner {
+            width: 44px;
+            height: 44px;
+            border: 3px solid #E2E8F0;
+            border-top-color: var(--c-primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        #loading p {
+            font-family: 'Kanit', sans-serif;
+            font-size: 0.9rem;
+            color: var(--c-text-secondary);
+            font-weight: 500;
+        }
+
+        /* ── APP HEADER ── */
+        .app-header {
+            position: relative;
+            padding: 40px 20px 70px;
+            text-align: center;
+            background: linear-gradient(180deg, #EFF6FF 0%, #F8FAFC 100%);
+            border-bottom: 1px solid var(--c-border);
+        }
+
+        .badge-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #FFFFFF;
+            border: 1px solid var(--c-border);
+            border-radius: var(--r-full);
+            padding: 6px 14px;
+            font-size: 0.78rem;
+            color: var(--c-primary);
+            font-family: 'Kanit', sans-serif;
+            font-weight: 600;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--c-primary);
+            border-radius: 50%;
+        }
+
+        .app-header h1 {
+            font-family: 'Kanit', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--c-text);
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+
+        .app-header p {
+            font-size: 0.9rem;
+            color: var(--c-text-secondary);
+        }
+
+        /* ── MAIN CONTAINER ── */
+        .container {
+            max-width: 520px;
+            margin: -40px auto 40px;
+            padding: 0 16px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .card {
+            background: var(--c-surface);
+            border: 1px solid var(--c-border);
+            border-radius: var(--r-xl);
+            padding: 28px 24px;
+            box-shadow: var(--shadow-xl);
+        }
+
+        /* ── STEPPER ── */
+        .stepper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 32px;
+            padding: 0 12px;
+        }
+
+        .step-line {
+            position: absolute;
+            top: 18px;
+            left: 36px;
+            right: 36px;
+            height: 3px;
+            background: #E2E8F0;
+            z-index: 1;
+        }
+
+        .step-line-fill {
+            position: absolute;
+            top: 18px;
+            left: 36px;
+            height: 3px;
+            background: var(--c-primary);
+            z-index: 2;
+            width: 0%;
+            transition: width 0.35s ease;
+        }
+
+        .step {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .step-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 2px solid #E2E8F0;
+            color: var(--c-text-muted);
+            font-family: 'Kanit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-circle {
+            border-color: var(--c-primary);
+            background: var(--c-primary);
+            color: #FFFFFF;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+        }
+
+        .step.done .step-circle {
+            border-color: var(--c-success);
+            background: var(--c-success);
+            color: #FFFFFF;
+        }
+
+        .step-label {
+            font-family: 'Kanit', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--c-text-muted);
+            transition: color 0.3s;
+        }
+
+        .step.active .step-label {
+            color: var(--c-primary);
+            font-weight: 600;
+        }
+
+        .step.done .step-label {
+            color: var(--c-success);
+        }
+
+        /* ── SECTION HEADINGS ── */
+        .section-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 22px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--c-border);
+        }
+
+        .section-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--c-primary-light);
+            border-radius: var(--r-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .section-head h3 {
+            font-family: 'Kanit', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--c-text);
+        }
+
+        .section-head p {
+            font-size: 0.82rem;
+            color: var(--c-text-secondary);
+            margin-top: 2px;
+        }
+
+        /* ── FORM SECTIONS ── */
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── FORM CONTROLS ── */
+        .field-group {
+            margin-bottom: 18px;
+        }
+
+        .field-group label {
+            display: block;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--c-text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .field-group .req {
+            color: var(--c-danger);
+        }
+
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: #F8FAFC;
+            border: 1px solid var(--c-border);
+            border-radius: var(--r-md);
+            font-family: 'Sarabun', sans-serif;
+            font-size: 0.95rem;
+            color: var(--c-text);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        input[type="text"]:focus,
+        select:focus,
+        textarea:focus {
+            background: #FFFFFF;
+            border-color: var(--c-primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-row input {
+            flex: 1;
+        }
+
+        .search-row .btn {
+            width: auto;
+            min-width: 90px;
+            padding: 0 20px;
+        }
+
+        /* ── INFO CARD (USER PROFILE) ── */
+        .info-card {
+            display: none;
+            background: #F8FAFC;
+            border: 1px solid var(--c-border);
+            border-radius: var(--r-lg);
+            padding: 18px;
+            margin-bottom: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .info-card.show {
+            display: block;
+        }
+
+        .ic-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .ic-avatar {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #2563EB, #4F46E5);
+            color: #FFFFFF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Kanit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            flex-shrink: 0;
+            box-shadow: 0 4px 8px rgba(37, 99, 235, 0.25);
+        }
+
+        .ic-name {
+            font-family: 'Kanit', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--c-text);
+        }
+
+        .ic-sub {
+            font-size: 0.82rem;
+            color: var(--c-text-secondary);
+            margin-top: 2px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding-top: 14px;
+            border-top: 1px solid var(--c-border);
+        }
+
+        .ig-item {
+            background: #FFFFFF;
+            border: 1px solid var(--c-border);
+            border-radius: var(--r-sm);
+            padding: 10px 12px;
+        }
+
+        .ig-item span:first-child {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--c-text-muted);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .ig-item span:last-child {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--c-text);
+        }
+
+        /* ── ALERTS ── */
+        .alert {
+            border-radius: var(--r-md);
+            font-size: 0.88rem;
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .alert.show {
+            display: flex;
+        }
+
+        .alert-error {
+            background: var(--c-danger-light);
+            border: 1px solid #FECACA;
+            color: var(--c-danger);
+        }
+
+        .alert-warning {
+            background: var(--c-warning-light);
+            border: 1px solid #FDE68A;
+            color: #B45309;
+        }
+
+        /* ── UPLOAD BOX ── */
+        .upload-box {
+            border: 2px dashed var(--c-border);
+            border-radius: var(--r-lg);
+            padding: 24px 16px;
+            text-align: center;
+            cursor: pointer;
+            background: #F8FAFC;
+            transition: all 0.2s ease;
+        }
+
+        .upload-box:hover {
+            border-color: var(--c-primary);
+            background: var(--c-primary-light);
+        }
+
+        .upload-icon {
+            width: 48px;
+            height: 48px;
+            background: #FFFFFF;
+            border: 1px solid var(--c-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin: 0 auto 10px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .upload-box p {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--c-text);
+        }
+
+        .upload-box span {
+            font-size: 0.78rem;
+            color: var(--c-text-muted);
+            display: block;
+            margin-top: 4px;
+        }
+
+        .upload-box input {
+            display: none;
+        }
+
+        .upload-preview {
+            display: none;
+            border-radius: var(--r-md);
+            overflow: hidden;
+            margin-top: 14px;
+            position: relative;
+            border: 1px solid var(--c-border);
+        }
+
+        .upload-preview img {
+            width: 100%;
+            max-height: 220px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .remove-img {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(15, 23, 42, 0.75);
+            color: #FFFFFF;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+
+        .remove-img:hover {
+            background: var(--c-danger);
+        }
+
+        /* ── BUTTONS ── */
+        .btn {
+            width: 100%;
+            padding: 13px 18px;
+            border: none;
+            border-radius: var(--r-md);
+            font-family: 'Kanit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            color: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.95;
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+        }
+
+        .btn-outline {
+            background: #FFFFFF;
+            color: var(--c-text-secondary);
+            border: 1px solid var(--c-border);
+        }
+
+        .btn-outline:hover {
+            background: #F8FAFC;
+            color: var(--c-text);
+            border-color: var(--c-border2);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+        }
+
+        .btn-success:hover {
+            opacity: 0.95;
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn-row .btn {
+            flex: 1;
+        }
+
+        /* ── CONFIRM SUMMARY CARD ── */
+        .confirm-card {
+            background: #F8FAFC;
+            border: 1px solid var(--c-border);
+            border-radius: var(--r-lg);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .confirm-header {
+            padding: 14px 18px;
+            background: var(--c-primary-light);
+            border-bottom: 1px solid #DBEAFE;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .confirm-header h4 {
+            font-family: 'Kanit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--c-primary);
+        }
+
+        .cr {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 18px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #F1F5F9;
+        }
+
+        .cr:last-child {
+            border: none;
+        }
+
+        .cr-label {
+            color: var(--c-text-muted);
+            font-weight: 500;
+        }
+
+        .cr-val {
+            font-weight: 600;
+            color: var(--c-text);
+            text-align: right;
+            max-width: 60%;
+        }
+
+        .cr-val.accent {
+            color: var(--c-primary);
+        }
+
+        .cr-detail {
+            padding: 12px 18px;
+            border-bottom: 1px solid #F1F5F9;
+        }
+
+        .cr-detail .cr-label {
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .cr-detail-text {
+            background: #FFFFFF;
+            border: 1px solid var(--c-border);
+            border-radius: var(--r-sm);
+            padding: 10px 14px;
+            font-size: 0.88rem;
+            color: var(--c-text-secondary);
+            line-height: 1.5;
+        }
+
+        /* ── SUCCESS SCREEN ── */
+        .success-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0 10px;
+            text-align: center;
+        }
+
+        .success-screen.show {
+            display: flex;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .success-ring {
+            width: 72px;
+            height: 72px;
+            background: var(--c-success-light);
+            color: var(--c-success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            border: 2px solid #A7F3D0;
+        }
+
+        .success-screen h2 {
+            font-family: 'Kanit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--c-text);
+            margin-bottom: 8px;
+        }
+
+        .success-screen p {
+            color: var(--c-text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            max-width: 320px;
+        }
+
+        .ticket-wrap {
+            background: #F8FAFC;
+            border: 1.5px dashed #BFDBFE;
+            border-radius: var(--r-lg);
+            padding: 18px 32px;
+            margin-bottom: 20px;
+        }
+
+        .ticket-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--c-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .ticket-badge {
+            font-family: 'Kanit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--c-primary);
+            letter-spacing: 1px;
+        }
+
+        /* ── MINI LOADER ── */
+        .mini-loader {
+            width: 18px;
+            height: 18px;
+            border: 2.5px solid rgba(255, 255, 255, 0.4);
+            border-top-color: #FFFFFF;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loading">
+        <div class="loader-spinner"></div>
+        <p>กำลังเชื่อมต่อระบบ LINE...</p>
+    </div>
+
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="badge-wrap">
+            <div class="badge-dot"></div>
+            Maintenance Service Portal
+        </div>
+        <h1>ระบบแจ้งซ่อมออนไลน์</h1>
+        <p>แจ้งเรื่องรวดเร็ว ติดตามสถานะผ่าน LINE ได้ตลอด 24 ชม.</p>
+    </header>
+
+    <!-- MAIN FORM -->
+    <main class="container">
+        <div class="card">
+
+            <!-- LIFF Warning -->
+            <div class="alert alert-warning" id="alertLiffError" style="display:none;">
+                <span>⚠️</span>
+                <span>ไม่ได้เปิดผ่าน LINE โดยตรง แต่ท่านยังสามารถแจ้งซ่อมได้ตามปกติ</span>
+            </div>
+
+            <!-- STEPPER -->
+            <div class="stepper" id="stepBar">
+                <div class="step-line"></div>
+                <div class="step-line-fill" id="stepLineFill"></div>
+                <div class="step active" id="s1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">ระบุตัวตน</div>
+                </div>
+                <div class="step" id="s2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">ข้อมูลปัญหา</div>
+                </div>
+                <div class="step" id="s3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">ยืนยัน</div>
+                </div>
+            </div>
+
+            <!-- SEC 1: ค้นหาพนักงาน / ยืนยันตัวตน -->
+            <div class="form-section active" id="sec1">
+                <div class="section-head">
+                    <div class="section-icon">🔍</div>
+                    <div>
+                        <h3>ข้อมูลผู้แจ้งซ่อม</h3>
+                        <p id="sec1Subtitle">กรุณากรอก Username ของคุณ</p>
+                    </div>
+                </div>
+
+                <!-- Alert welcome LINE OA -->
+                <div class="alert" id="alertLineOALogin"
+                    style="display:none;background:var(--c-success-light);border:1px solid #A7F3D0;color:var(--c-success);">
+                    <span>🟢</span>
+                    <span>เข้าสู่ระบบอัตโนมัติผ่าน LINE OA เรียบร้อยแล้ว</span>
+                </div>
+
+                <div class="field-group" id="loginFormContainer">
+                    <label>ชื่อผู้ใช้งาน (Username) <span class="req">*</span></label>
+                    <div class="search-row">
+                        <input id="inputId" type="text" placeholder="ระบุ Username เช่น EMP001">
+                        <button class="btn btn-primary" onclick="searchUser()">ค้นหา</button>
+                    </div>
+                </div>
+
+                <div class="alert alert-error" id="alertSearch"></div>
+
+                <div class="info-card" id="infoCard">
+                    <div class="ic-header">
+                        <div class="ic-avatar" id="icInitials">NN</div>
+                        <div>
+                            <div class="ic-name" id="iName"></div>
+                            <div class="ic-sub" id="iPos"></div>
+                        </div>
+                    </div>
+                    <div class="info-grid">
+                        <div class="ig-item">
+                            <span>หน่วยงาน / แผนก</span>
+                            <span id="iDept">-</span>
+                        </div>
+                        <div class="ig-item">
+                            <span>สาขา (Site)</span>
+                            <span id="iSite">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-row" id="nextBtn1" style="display:none;">
+                    <button class="btn btn-outline" id="btnHistory" onclick="sendHistory()">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M1 8a7 7 0 1 0 1.1-3.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                            <path d="M1 1v4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                        ประวัติการแจ้ง
+                    </button>
+                    <button class="btn btn-primary" onclick="goStep(2)">
+                        แจ้งซ่อมใหม่
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- History Status -->
+                <div id="historyLoading" style="display:none;text-align:center;padding:16px 0;">
+                    <div class="loader-spinner" style="width:28px;height:28px;margin:0 auto 10px;"></div>
+                    <p style="font-size:0.85rem;color:var(--c-text-muted);">กำลังดึงประวัติการแจ้งซ่อมไปยัง LINE...</p>
+                </div>
+                <div id="historyStatus" style="display:none;margin-top:12px;"></div>
+            </div>
+
+            <!-- SEC 2: รายละเอียดการแจ้งซ่อม -->
+            <div class="form-section" id="sec2">
+                <div class="section-head">
+                    <div class="section-icon">🔧</div>
+                    <div>
+                        <h3>รายละเอียดปัญหา</h3>
+                        <p>ระบุปัญหาและอาการที่พบอย่างละเอียด</p>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label>ประเภทปัญหาที่พบ <span class="req">*</span></label>
+                    <select id="selIssue">
+                        <option value="" disabled selected>— เลือกประเภทปัญหา —</option>
+                        <option>ไฟฟ้า / แสงสว่าง</option>
+                        <option>ประปา / ท่อน้ำ</option>
+                        <option>เครื่องปรับอากาศ</option>
+                        <option>เฟอร์นิเจอร์ / อุปกรณ์สำนักงาน</option>
+                        <option>ประตู / หน้าต่าง</option>
+                        <option>คอมพิวเตอร์ / ระบบไอที</option>
+                        <option>อื่นๆ</option>
+                    </select>
+                </div>
+
+                <div class="field-group">
+                    <label>รายละเอียดเพิ่มเติม</label>
+                    <textarea id="txtDetail" placeholder="ระบุจุดที่เกิดปัญหา บริเวณห้อง หรืออาการที่พบ..."></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label>รูปภาพประกอบ (ถ้ามี)</label>
+                    <div class="upload-box" id="uploadBox" onclick="document.getElementById('imgInput').click()">
+                        <div class="upload-icon">📸</div>
+                        <p>แตะเพื่อถ่ายรูปหรือเลือกรูปถ่าย</p>
+                        <span>รองรับ .jpg, .png ขนาดไม่เกิน 5MB</span>
+                        <input type="file" id="imgInput" accept="image/*" onchange="previewImg(this)">
+                    </div>
+                    <div class="upload-preview" id="preview">
+                        <button class="remove-img" onclick="removeImg()">✕</button>
+                        <img id="previewImg" src="" alt="พรีวิวรูปภาพ">
+                    </div>
+                </div>
+
+                <div class="alert alert-error" id="alertForm"></div>
+
+                <div class="btn-row">
+                    <button class="btn btn-outline" onclick="goStep(1)">ย้อนกลับ</button>
+                    <button class="btn btn-primary" onclick="goStep(3)">ขั้นตอนต่อไป</button>
+                </div>
+            </div>
+
+            <!-- SEC 3: ยืนยันข้อมูล -->
+            <div class="form-section" id="sec3">
+                <div class="section-head">
+                    <div class="section-icon">📋</div>
+                    <div>
+                        <h3>ตรวจสอบและยืนยัน</h3>
+                        <p>ตรวจสอบความถูกต้องของข้อมูลก่อนส่ง</p>
+                    </div>
+                </div>
+
+                <div class="confirm-card" id="confirmCard">
+                    <div class="confirm-header">
+                        <span>👤</span>
+                        <h4>สรุปข้อมูลการแจ้งซ่อม</h4>
+                    </div>
+                    <div class="confirm-body">
+                        <div class="cr">
+                            <span class="cr-label">ผู้แจ้ง</span>
+                            <span class="cr-val" id="cName">-</span>
+                        </div>
+                        <div class="cr">
+                            <span class="cr-label">หน่วยงาน</span>
+                            <span class="cr-val" id="cDept">-</span>
+                        </div>
+                        <div class="cr">
+                            <span class="cr-label">ประเภทปัญหา</span>
+                            <span class="cr-val accent" id="cIssue">-</span>
+                        </div>
+                        <div class="cr-detail">
+                            <span class="cr-label">รายละเอียดปัญหา</span>
+                            <div class="cr-detail-text" id="cDetail">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-error" id="alertSubmit" style="margin-top:16px;"></div>
+
+                <div class="btn-row" style="margin-top:20px;">
+                    <button class="btn btn-outline" onclick="goStep(2)">แก้ไข</button>
+                    <button class="btn btn-success" id="btnSubmit" onclick="submitForm()">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M2 8l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        ยืนยันส่งเรื่อง
+                    </button>
+                </div>
+            </div>
+
+            <!-- SUCCESS SCREEN -->
+            <div class="success-screen" id="successScreen">
+                <div class="success-ring">✓</div>
+                <h2>ส่งเรื่องแจ้งซ่อมสำเร็จ!</h2>
+                <p>ระบบได้รับข้อมูลเรียบร้อยแล้ว ทีมช่างจะติดต่อกลับและแจ้งเตือนสถานะผ่าน LINE</p>
+
+                <div class="ticket-wrap">
+                    <span class="ticket-label">หมายเลข Ticket ID</span>
+                    <div class="ticket-badge" id="ticketDisplay">TK00000</div>
+                </div>
+
+                <div class="btn-row" style="margin-top:20px;width:100%;">
+                    <button class="btn btn-primary" onclick="liff.closeWindow();">ปิดหน้าต่าง</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxvTT31CljbM8wIKi2jbm8fhFOUdu9MHKnk23jnOhuKQ7sG_32FCEmu3mLgNPqiH_kp_Q/exec';
+        const LIFF_ID = '2009669941-oojQ8hNu';
+
+        let lineUid = '';
+        let userData = null;
+        let imgBase64 = '';
+
+        function hideLoading() {
+            const el = document.getElementById('loading');
+            if (el) {
+                el.style.opacity = '0';
+                setTimeout(() => { el.style.display = 'none'; }, 400);
+            }
+        }
+
+        async function initApp() {
+            const params = new URLSearchParams(location.search);
+            const urlUid = params.get('uid');
+            if (urlUid && urlUid.startsWith("U")) {
+                lineUid = urlUid;
+                await checkAutoLogin();
+                hideLoading();
+                return;
+            }
+            try {
+                await liff.init({ liffId: LIFF_ID });
+                if (liff.isLoggedIn()) {
+                    const profile = await liff.getProfile();
+                    lineUid = profile.userId;
+                    await checkAutoLogin();
+                } else {
+                    lineUid = 'U_DEV_' + Date.now();
+                    document.getElementById('alertLiffError').style.display = 'flex';
+                }
+            } catch (err) {
+                console.warn('LIFF Init Error:', err);
+                lineUid = 'U_DEV_' + Date.now();
+                document.getElementById('alertLiffError').style.display = 'flex';
+            }
+            hideLoading();
+        }
+
+        async function checkAutoLogin() {
+            if (!lineUid || lineUid.startsWith('U_DEV_')) return;
+            try {
+                const res = await fetch(`${API_URL}?action=checkAuth&lineUid=${lineUid}`, { redirect: "follow" });
+                const auth = await res.json();
+                if (auth.found) {
+                    userData = auth;
+                    const fullName = auth.name || (auth.firstName + ' ' + auth.lastName);
+                    document.getElementById('iName').textContent = fullName;
+                    document.getElementById('iPos').textContent = auth.position || '-';
+                    document.getElementById('iDept').textContent = auth.department || '-';
+                    document.getElementById('iSite').textContent = auth.site || 'สำนักงานใหญ่';
+                    document.getElementById('icInitials').textContent = getInitials(fullName);
+
+                    document.getElementById('infoCard').classList.add('show');
+                    document.getElementById('nextBtn1').style.display = 'flex';
+                    document.getElementById('loginFormContainer').style.display = 'none';
+                    document.getElementById('alertLineOALogin').style.display = 'flex';
+                    document.getElementById('sec1Subtitle').textContent = 'เข้าสู่ระบบสำเร็จในฐานะผู้ใช้ LINE OA';
+                }
+            } catch (err) {
+                console.warn('Auto-login check failed:', err);
+            }
+        }
+
+        function getInitials(name) {
+            if (!name) return 'NN';
+            const parts = name.trim().split(' ');
+            if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+            return name.substring(0, 2).toUpperCase();
+        }
+
+        async function searchUser() {
+            const id = document.getElementById('inputId').value.trim();
+            if (!id) return showAlert('alertSearch', '⚠️ กรุณาระบุ Username');
+
+            const btn = document.querySelector('#sec1 .search-row .btn');
+            btn.innerHTML = '<div class="mini-loader"></div>';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_URL}?action=getUserByUsername&username=${encodeURIComponent(id)}`, { redirect: "follow" });
+                const res = await response.json();
+
+                if (res.found) {
+                    userData = res;
+                    const fullName = res.name || (res.firstName + ' ' + res.lastName);
+                    document.getElementById('iName').textContent = fullName;
+                    document.getElementById('iPos').textContent = res.position || '-';
+                    document.getElementById('iDept').textContent = res.department || '-';
+                    document.getElementById('iSite').textContent = res.site || 'สำนักงานใหญ่';
+                    document.getElementById('icInitials').textContent = getInitials(fullName);
+
+                    document.getElementById('infoCard').classList.add('show');
+                    document.getElementById('nextBtn1').style.display = 'flex';
+                    document.getElementById('alertSearch').classList.remove('show');
+                } else {
+                    showAlert('alertSearch', '✕ ไม่พบข้อมูลผู้ใช้งาน กรุณาตรวจสอบ Username อีกครั้ง');
+                    document.getElementById('infoCard').classList.remove('show');
+                    document.getElementById('nextBtn1').style.display = 'none';
+                }
+            } catch (err) {
+                showAlert('alertSearch', '⚠️ ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณาลองใหม่');
+            }
+
+            btn.innerHTML = 'ค้นหา';
+            btn.disabled = false;
+        }
+
+        function updateStepLine(n) {
+            const fill = document.getElementById('stepLineFill');
+            const pct = n === 1 ? 0 : n === 2 ? 50 : 100;
+            fill.style.width = pct + '%';
+        }
+
+        function goStep(n) {
+            if (n === 2 && !userData) return;
+            if (n === 3) {
+                const issue = document.getElementById('selIssue').value;
+                if (!issue) return showAlert('alertForm', '⚠️ กรุณาเลือกประเภทปัญหาก่อนดำเนินการต่อ');
+                document.getElementById('alertForm').classList.remove('show');
+                document.getElementById('cName').textContent = userData.firstName + ' ' + userData.lastName;
+                document.getElementById('cDept').textContent = userData.department;
+                document.getElementById('cIssue').textContent = issue;
+                document.getElementById('cDetail').textContent = document.getElementById('txtDetail').value || 'ไม่มีรายละเอียดเพิ่มเติม';
+            }
+
+            document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+            document.getElementById('sec' + n).classList.add('active');
+
+            for (let i = 1; i <= 3; i++) {
+                const el = document.getElementById('s' + i);
+                el.classList.remove('active', 'done');
+                if (i < n) el.classList.add('done');
+                else if (i === n) el.classList.add('active');
+            }
+
+            updateStepLine(n);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function previewImg(input) {
+            if (!input.files[0]) return;
+            if (input.files[0].size > 5 * 1024 * 1024) {
+                alert("ขนาดไฟล์ภาพใหญ่เกินไป (ไม่เกิน 5MB)");
+                input.value = "";
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = e => {
+                imgBase64 = e.target.result;
+                document.getElementById('previewImg').src = imgBase64;
+                document.getElementById('preview').style.display = 'block';
+                document.getElementById('uploadBox').style.display = 'none';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+        function removeImg() {
+            imgBase64 = '';
+            document.getElementById('imgInput').value = '';
+            document.getElementById('preview').style.display = 'none';
+            document.getElementById('uploadBox').style.display = 'block';
+        }
+
+        async function submitForm() {
+            const btn = document.getElementById('btnSubmit');
+            btn.disabled = true;
+            btn.innerHTML = '<div class="mini-loader"></div> กำลังส่งเรื่อง...';
+
+            const payload = {
+                action: 'submitRepair',
+                data: {
+                    uid: lineUid,
+                    fullName: userData.firstName + ' ' + userData.lastName,
+                    department: userData.department,
+                    site: userData.site,
+                    issue: document.getElementById('selIssue').value + (document.getElementById('txtDetail').value ? ' — ' + document.getElementById('txtDetail').value : ''),
+                    imgBefore: imgBase64
+                }
+            };
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload),
+                    redirect: "follow"
+                });
+                const res = await response.json();
+
+                if (res.success) {
+                    document.getElementById('stepBar').style.display = 'none';
+                    document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+                    document.getElementById('ticketDisplay').textContent = res.ticketId;
+                    document.getElementById('successScreen').classList.add('show');
+                } else {
+                    showAlert('alertSubmit', '✕ เกิดข้อผิดพลาด: ' + (res.error || 'ไม่สามารถส่งเรื่องได้'));
+                    btn.disabled = false;
+                    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> ยืนยันส่งเรื่อง';
+                }
+            } catch (err) {
+                showAlert('alertSubmit', '⚠️ การเชื่อมต่อขัดข้อง กรุณาลองใหม่อีกครั้ง');
+                btn.disabled = false;
+                btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> ยืนยันส่งเรื่อง';
+            }
+        }
+
+        async function sendHistory() {
+            if (!userData || !lineUid || lineUid.startsWith('U_DEV_')) {
+                showHistoryStatus('info', '⚠️ ฟังก์ชันนี้ใช้งานได้เฉพาะใน LINE เท่านั้น');
+                return;
+            }
+
+            const btn = document.getElementById('btnHistory');
+            btn.disabled = true;
+            btn.innerHTML = '<div class="mini-loader" style="border-top-color:var(--c-primary);border-color:#CBD5E1;"></div> โหลด...';
+            document.getElementById('historyLoading').style.display = 'block';
+            document.getElementById('historyStatus').style.display = 'none';
+
+            try {
+                const res = await fetch(
+                    `${API_URL}?action=getHistory&department=${encodeURIComponent(userData.department)}&site=${encodeURIComponent(userData.site)}&uid=${lineUid}`,
+                    { redirect: "follow" }
+                );
+                const json = await res.json();
+
+                document.getElementById('historyLoading').style.display = 'none';
+
+                if (json.success) {
+                    if (json.count === 0) {
+                        showHistoryStatus('empty', '📭 ยังไม่มีประวัติการแจ้งซ่อมของคุณ');
+                    } else {
+                        showHistoryStatus('success', `✅ ส่งประวัติ ${json.count} รายการไปยังห้องแชท LINE แล้ว`);
+                    }
+                } else {
+                    showHistoryStatus('error', '✕ เกิดข้อผิดพลาด: ' + json.error);
+                }
+            } catch (err) {
+                document.getElementById('historyLoading').style.display = 'none';
+                showHistoryStatus('error', '⚠️ ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง');
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M1 8a7 7 0 1 0 1.1-3.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M1 1v4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> ประวัติการแจ้ง`;
+        }
+
+        function showHistoryStatus(type, msg) {
+            const el = document.getElementById('historyStatus');
+            const colors = {
+                success: { bg: 'var(--c-success-light)', border: '#A7F3D0', color: '#047857' },
+                error: { bg: 'var(--c-danger-light)', border: '#FECACA', color: '#B91C1C' },
+                info: { bg: 'var(--c-warning-light)', border: '#FDE68A', color: '#B45309' },
+                empty: { bg: '#F1F5F9', border: '#E2E8F0', color: '#475569' }
+            };
+            const c = colors[type] || colors.info;
+            el.style.cssText = `display:block;background:${c.bg};border:1px solid ${c.border};color:${c.color};border-radius:12px;padding:12px 16px;font-size:0.85rem;font-weight:600;`;
+            el.textContent = msg;
+        }
+
+        function showAlert(id, msg) {
+            const el = document.getElementById(id);
+            el.innerHTML = msg;
+            el.classList.add('show');
+        }
+
+        window.onload = initApp;
+    </script>
+</body>
+
+</html>
