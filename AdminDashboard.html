@@ -69,7 +69,7 @@
             inset: 0;
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(6px);
-            display: flex;
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -1457,11 +1457,16 @@
         let currentPage = 1;
 
         window.onload = () => {
+            showLoading(false);
             const saved = sessionStorage.getItem('adminData');
             if (saved) {
-                adminData = JSON.parse(saved);
-                showDashboard();
-                fetchData();
+                try {
+                    adminData = JSON.parse(saved);
+                    showDashboard();
+                    fetchData();
+                } catch (e) {
+                    sessionStorage.removeItem('adminData');
+                }
             }
         };
 
@@ -1504,7 +1509,7 @@
                     adminData = json;
                     sessionStorage.setItem('adminData', JSON.stringify(adminData));
                     showDashboard();
-                    fetchData();
+                    await fetchData();
                     showToast('เข้าสู่ระบบสำเร็จแล้ว!');
                 } else {
                     const errEl = document.getElementById('loginError');
