@@ -18,19 +18,19 @@
             --c-surface2: #F8FAFC;
             --c-border: #E2E8F0;
             --c-border2: #CBD5E1;
-            
+
             --c-primary: #1E40AF;
             --c-primary-light: #EFF6FF;
             --c-primary-dark: #1E3A8A;
             --c-primary-accent: #2563EB;
-            
+
             --c-success: #059669;
             --c-success-light: #ECFDF5;
             --c-warning: #D97706;
             --c-warning-light: #FFFBEB;
             --c-danger: #DC2626;
             --c-danger-light: #FEF2F2;
-            
+
             --c-text: #0F172A;
             --c-text-secondary: #475569;
             --c-text-muted: #64748B;
@@ -91,7 +91,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         #loading p {
@@ -356,8 +358,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* ── FORM CONTROLS ── */
@@ -680,6 +689,98 @@
             box-shadow: 0 4px 14px rgba(16, 185, 129, 0.32);
         }
 
+        .btn-line {
+            background: #06C755;
+            color: #FFFFFF;
+            box-shadow: 0 4px 14px rgba(6, 199, 85, 0.35);
+            font-weight: 600;
+        }
+
+        .btn-line:hover {
+            background: #05b34c;
+            box-shadow: 0 6px 18px rgba(6, 199, 85, 0.45);
+        }
+
+        /* ── LINE LOGIN GATE SCREEN (FORCED LOGIN) ── */
+        .line-gate-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 18px 8px 10px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .line-gate-screen.show {
+            display: flex;
+        }
+
+        .line-gate-icon {
+            width: 76px;
+            height: 76px;
+            background: #E8F8EE;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border: 2px solid #A7F3D0;
+            box-shadow: 0 8px 20px rgba(6, 199, 85, 0.15);
+        }
+
+        .line-gate-screen h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--c-text);
+            margin-bottom: 12px;
+            letter-spacing: -0.2px;
+        }
+
+        .line-gate-notice {
+            background: #F8FAFC;
+            border: 1px solid var(--c-border);
+            border-left: 4px solid #06C755;
+            border-radius: var(--r-md);
+            padding: 16px;
+            text-align: left;
+            margin-bottom: 24px;
+            width: 100%;
+        }
+
+        .line-gate-notice p {
+            color: var(--c-text-secondary);
+            font-size: 0.88rem;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .line-gate-notice p:last-child {
+            margin-bottom: 0;
+        }
+
+        .line-gate-notice strong {
+            color: var(--c-text);
+        }
+
+        .line-gate-benefits {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .line-gate-benefits li {
+            font-size: 0.84rem;
+            color: var(--c-text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .line-gate-benefits li svg {
+            color: #06C755;
+            flex-shrink: 0;
+        }
+
         .btn-success:hover {
             opacity: 0.96;
             box-shadow: 0 6px 18px rgba(16, 185, 129, 0.42);
@@ -871,18 +972,20 @@
         <div class="topbar-inner">
             <div class="topbar-brand">
                 <div class="topbar-logo">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
                     </svg>
                 </div>
                 <div>
                     <div class="topbar-title">Maintenance Service</div>
-                    <div class="topbar-sub">ระบบแจ้งซ่อมบำรุงออนไลน์</div>
+                    <div class="topbar-sub">ระบบแจ้งซ่อมออนไลน์</div>
                 </div>
             </div>
             <div class="badge-wrap" style="margin-bottom:0;padding:4px 10px;font-size:0.75rem;">
                 <div class="badge-dot"></div>
-                LIFF 2.0
+                HRRX
             </div>
         </div>
     </header>
@@ -893,18 +996,54 @@
             <div class="badge-dot"></div>
             Maintenance Service Portal
         </div>
-        <h1>แจ้งซ่อมบำรุงออนไลน์</h1>
-        <p>บันทึกแจ้งซ่อมรวดเร็ว ตรวจสอบและติดตามสถานะงานผ่าน LINE ตลอด 24 ชม.</p>
+        <h1>แจ้งซ่อม Online</h1>
+        <p>แจ้งซ่อม ตรวจสอบและติดตามสถานะงานผ่าน LINE</p>
     </header>
 
     <!-- MAIN FORM -->
     <main class="container">
         <div class="card">
 
-            <!-- LIFF Warning -->
-            <div class="alert alert-warning" id="alertLiffError" style="display:none;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                <span>ไม่ได้เปิดผ่าน LINE โดยตรง แต่ท่านยังสามารถแจ้งซ่อมได้ตามปกติ</span>
+            <!-- LINE Login Gate Screen (Forced for Regular Browser) -->
+            <div class="line-gate-screen" id="lineGateScreen">
+                <div class="line-gate-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#06C755" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                </div>
+                <h2>เข้าสู่ระบบด้วย LINE เพื่อดำเนินการต่อ</h2>
+                
+                <div class="line-gate-notice">
+                    <p><strong>ทำไมต้องเข้าสู่ระบบผ่าน LINE?</strong></p>
+                    <p>ระบบแจ้งซ่อมออนไลน์เชื่อมต่อกับระบบอัตโนมัติของฝ่ายช่าง จำเป็นต้องยืนยันตัวตนผ่านบัญชี LINE ของท่าน เพื่อ:</p>
+                    <ul class="line-gate-benefits">
+                        <li>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            รับการแจ้งเตือนสถานะการซ่อมแบบเรียลไทม์ผ่าน LINE
+                        </li>
+                        <li>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            ติดตามและตรวจสอบความคืบหน้าของช่างผู้รับผิดชอบ
+                        </li>
+                        <li>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            รับผลการซ่อมและประเมินความพึงพอใจการบริการ
+                        </li>
+                    </ul>
+                </div>
+
+                <button class="btn btn-line" id="btnLineLogin" onclick="loginWithLine()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M22 10.5C22 5.8 17.5 2 12 2S2 5.8 2 10.5c0 4.2 3.6 7.7 8.5 8.3.3.1.8.2.9.6.1.4.1 1.2 0 1.6-.1.6-.4 2.2-.4 2.2s-.1.4.2.2c.3-.2 3.9-2.4 5.4-3.5 3.3-1.2 5.4-4.5 5.4-9.4z"/>
+                    </svg>
+                    เข้าสู่ระบบด้วย LINE (LINE Login)
+                </button>
             </div>
 
             <!-- STEPPER -->
@@ -929,7 +1068,11 @@
             <div class="form-section active" id="sec1">
                 <div class="section-head">
                     <div class="section-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--c-primary)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--c-primary)"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        </svg>
                     </div>
                     <div>
                         <h3>ข้อมูลผู้แจ้งซ่อม</h3>
@@ -940,7 +1083,11 @@
                 <!-- Alert welcome LINE OA -->
                 <div class="alert" id="alertLineOALogin"
                     style="display:none;background:var(--c-success-light);border:1px solid #A7F3D0;color:var(--c-success);">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                        stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="m9 12 2 2 4-4" />
+                    </svg>
                     <span>เข้าสู่ระบบอัตโนมัติผ่าน LINE OA เรียบร้อยแล้ว</span>
                 </div>
 
@@ -977,16 +1124,19 @@
                 <div class="btn-row" id="nextBtn1" style="display:none;">
                     <button class="btn btn-outline" id="btnHistory" onclick="sendHistory()">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <path d="M1 8a7 7 0 1 0 1.1-3.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                            <path d="M1 1v4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                            <path d="M1 8a7 7 0 1 0 1.1-3.8" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" />
+                            <path d="M1 1v4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                            <path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
                         </svg>
                         ประวัติการแจ้ง
                     </button>
                     <button class="btn btn-primary" onclick="goStep(2)">
                         แจ้งซ่อมใหม่
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </button>
                 </div>
@@ -1003,7 +1153,11 @@
             <div class="form-section" id="sec2">
                 <div class="section-head">
                     <div class="section-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--c-primary)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--c-primary)"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                        </svg>
                     </div>
                     <div>
                         <h3>รายละเอียดปัญหา</h3>
@@ -1034,7 +1188,12 @@
                     <label>รูปภาพประกอบ (ถ้ามี)</label>
                     <div class="upload-box" id="uploadBox" onclick="document.getElementById('imgInput').click()">
                         <div class="upload-icon">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--c-text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--c-text-muted)"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                                <circle cx="12" cy="13" r="4" />
+                            </svg>
                         </div>
                         <p>แตะเพื่อถ่ายรูปหรือเลือกรูปถ่าย</p>
                         <span>รองรับ .jpg, .png ขนาดไม่เกิน 5MB</span>
@@ -1042,7 +1201,11 @@
                     </div>
                     <div class="upload-preview" id="preview">
                         <button class="remove-img" onclick="removeImg()">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
                         </button>
                         <img id="previewImg" src="" alt="พรีวิวรูปภาพ">
                     </div>
@@ -1060,7 +1223,11 @@
             <div class="form-section" id="sec3">
                 <div class="section-head">
                     <div class="section-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--c-primary)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--c-primary)"
+                            stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                        </svg>
                     </div>
                     <div>
                         <h3>ตรวจสอบและยืนยัน</h3>
@@ -1070,7 +1237,11 @@
 
                 <div class="confirm-card" id="confirmCard">
                     <div class="confirm-header">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
                         <h4>สรุปข้อมูลการแจ้งซ่อม</h4>
                     </div>
                     <div class="confirm-body">
@@ -1099,7 +1270,8 @@
                     <button class="btn btn-outline" onclick="goStep(2)">แก้ไข</button>
                     <button class="btn btn-success" id="btnSubmit" onclick="submitForm()">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <path d="M2 8l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M2 8l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
                         </svg>
                         ยืนยันส่งเรื่อง
                     </button>
@@ -1109,7 +1281,10 @@
             <!-- SUCCESS SCREEN -->
             <div class="success-screen" id="successScreen">
                 <div class="success-ring">
-                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 6 9 17l-5-5" />
+                    </svg>
                 </div>
                 <h2>ส่งเรื่องแจ้งซ่อมสำเร็จ</h2>
                 <p>ระบบได้รับข้อมูลเรียบร้อยแล้ว ทีมช่างจะติดต่อกลับและแจ้งเตือนสถานะผ่าน LINE</p>
@@ -1152,6 +1327,7 @@
                 hideLoading();
                 return;
             }
+
             try {
                 await liff.init({ liffId: LIFF_ID });
                 if (liff.isLoggedIn()) {
@@ -1159,15 +1335,49 @@
                     lineUid = profile.userId;
                     await checkAutoLogin();
                 } else {
-                    lineUid = 'U_DEV_' + Date.now();
-                    document.getElementById('alertLiffError').style.display = 'flex';
+                    // Not logged in to LINE: enforce LINE Login
+                    showLineGate();
                 }
             } catch (err) {
                 console.warn('LIFF Init Error:', err);
-                lineUid = 'U_DEV_' + Date.now();
-                document.getElementById('alertLiffError').style.display = 'flex';
+                showLineGate();
             }
             hideLoading();
+        }
+
+        function showLineGate() {
+            // Hide stepper and form sections, show forced LINE login gate
+            const stepBar = document.getElementById('stepBar');
+            if (stepBar) stepBar.style.display = 'none';
+
+            document.querySelectorAll('.form-section').forEach(s => {
+                s.style.display = 'none';
+                s.classList.remove('active');
+            });
+
+            const gate = document.getElementById('lineGateScreen');
+            if (gate) {
+                gate.classList.add('show');
+            }
+        }
+
+        function loginWithLine() {
+            const btn = document.getElementById('btnLineLogin');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<div class="mini-loader"></div> กำลังนำคุณไปยัง LINE Login...';
+            }
+
+            try {
+                if (typeof liff !== 'undefined' && liff.login) {
+                    liff.login({ redirectUri: window.location.href });
+                } else {
+                    // Fallback to LIFF direct URL
+                    window.location.href = `https://liff.line.me/${LIFF_ID}`;
+                }
+            } catch (e) {
+                window.location.href = `https://liff.line.me/${LIFF_ID}`;
+            }
         }
 
         async function checkAutoLogin() {
