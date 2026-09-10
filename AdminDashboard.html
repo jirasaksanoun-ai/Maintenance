@@ -406,6 +406,7 @@
         .kpi-card.amber .kpi-icon-wrap { background: #FFFBEB; color: var(--c-warning); }
         .kpi-card.purple .kpi-icon-wrap { background: #F5F3FF; color: var(--c-purple); }
         .kpi-card.green .kpi-icon-wrap { background: #ECFDF5; color: var(--c-success); }
+        .kpi-card.teal .kpi-icon-wrap { background: #F0FDFA; color: #0D9488; }
         .kpi-card.rose .kpi-icon-wrap { background: #FFF1F2; color: #BE123C; }
         .kpi-card.sky .kpi-icon-wrap { background: #F0F9FF; color: var(--c-sky); }
 
@@ -419,6 +420,25 @@
             font-weight: 700;
             color: var(--c-text);
             line-height: 1.1;
+        }
+
+        .kpi-compare-wrap {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            line-height: 1.1;
+        }
+
+        .kpi-compare-divider {
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: var(--c-text-muted);
+        }
+
+        .kpi-compare-completed {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--c-success);
         }
 
         .kpi-label {
@@ -1529,9 +1549,13 @@
                             </svg>
                         </div>
                         <div class="kpi-body">
-                            <div class="kpi-value" id="kTotal">—</div>
-                            <div class="kpi-label">Tickets ทั้งหมด</div>
-                            <div class="kpi-sub">งานแจ้งซ่อมสะสม</div>
+                            <div class="kpi-compare-wrap">
+                                <span class="kpi-value" id="kTotal">—</span>
+                                <span class="kpi-compare-divider">/</span>
+                                <span class="kpi-compare-completed" id="kCompVal" title="งานเสร็จสมบูรณ์">—</span>
+                            </div>
+                            <div class="kpi-label">Tickets ทั้งหมด (ทั้งหมด / เสร็จ)</div>
+                            <div class="kpi-sub" id="kCompPctBadge">เสร็จสิ้น —</div>
                         </div>
                     </div>
 
@@ -1562,17 +1586,16 @@
                         </div>
                     </div>
 
-                    <div class="kpi-card green">
+                    <div class="kpi-card teal">
                         <div class="kpi-icon-wrap">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                                <polyline points="22 4 12 14.01 9 11.01"/>
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                             </svg>
                         </div>
                         <div class="kpi-body">
-                            <div class="kpi-value" id="kComp">—</div>
-                            <div class="kpi-label">เสร็จสมบูรณ์</div>
-                            <div class="kpi-sub" id="dTotalTicket">งานปิดแล้วเสร็จ</div>
+                            <div class="kpi-value" id="kReview">—</div>
+                            <div class="kpi-label">รอการประเมิน (Review)</div>
+                            <div class="kpi-sub" id="dReviewSub">รอผู้แจ้งให้คะแนนบริการ</div>
                         </div>
                     </div>
 
@@ -1733,6 +1756,22 @@
                             </svg>
                             <input id="searchInput" type="text" class="search-input" placeholder="ค้นหา Ticket ID, ชื่อผู้แจ้ง, แผนก..." oninput="currentPage=1;renderTable();">
                         </div>
+
+                        <select id="filterMonth" class="select-custom" onchange="currentPage=1;renderTable();">
+                            <option value="All">ทุกเดือน (Created Month)</option>
+                            <option value="0">มกราคม</option>
+                            <option value="1">กุมภาพันธ์</option>
+                            <option value="2">มีนาคม</option>
+                            <option value="3">เมษายน</option>
+                            <option value="4">พฤษภาคม</option>
+                            <option value="5">มิถุนายน</option>
+                            <option value="6">กรกฎาคม</option>
+                            <option value="7">สิงหาคม</option>
+                            <option value="8">กันยายน</option>
+                            <option value="9">ตุลาคม</option>
+                            <option value="10">พฤศจิกายน</option>
+                            <option value="11">ธันวาคม</option>
+                        </select>
 
                         <select id="filterStatus" class="select-custom" onchange="currentPage=1;renderTable();">
                             <option value="All">ทุกสถานะการดำเนินงาน</option>
@@ -2011,19 +2050,43 @@
         function renderTable() {
             const search = document.getElementById('searchInput').value.toLowerCase();
             const status = document.getElementById('filterStatus').value;
+            const monthVal = document.getElementById('filterMonth') ? document.getElementById('filterMonth').value : 'All';
 
             const filtered = allTickets.filter(t => {
-                return (status === 'All' || t['Status'] === status) &&
-                    (!search || String(t['Ticket_ID'] || '').toLowerCase().includes(search) || 
+                const matchStatus = (status === 'All' || t['Status'] === status);
+                
+                let matchMonth = true;
+                if (monthVal !== 'All') {
+                    const d = new Date(t['Created_Date']);
+                    matchMonth = !isNaN(d) && d.getMonth().toString() === monthVal;
+                }
+
+                const matchSearch = !search || 
+                     String(t['Ticket_ID'] || '').toLowerCase().includes(search) || 
                      String(t['User_Name'] || '').toLowerCase().includes(search) ||
                      String(t['Department'] || '').toLowerCase().includes(search) ||
-                     String(t['Issue'] || '').toLowerCase().includes(search));
+                     String(t['Issue'] || '').toLowerCase().includes(search);
+
+                return matchStatus && matchMonth && matchSearch;
             });
 
-            document.getElementById('kTotal').textContent = allTickets.length;
+            const totalCount = allTickets.length;
+            const completedCount = allTickets.filter(t => t['Status'] === 'Completed').length;
+            const completedPct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+            const reviewCount = allTickets.filter(t => t['Status'] === 'Waiting for Review').length;
+
+            document.getElementById('kTotal').textContent = totalCount;
+            const kCompEl = document.getElementById('kCompVal');
+            if (kCompEl) kCompEl.textContent = completedCount;
+            const kCompPctEl = document.getElementById('kCompPctBadge');
+            if (kCompPctEl) kCompPctEl.textContent = `เสร็จสิ้น ${completedCount} งาน (${completedPct}%)`;
+
             document.getElementById('kWait').textContent = allTickets.filter(t => t['Status'] === 'Open').length;
             document.getElementById('kProg').textContent = allTickets.filter(t => t['Status'] === 'In Progress').length;
-            document.getElementById('kComp').textContent = allTickets.filter(t => t['Status'] === 'Completed').length;
+            const kRevEl = document.getElementById('kReview');
+            if (kRevEl) kRevEl.textContent = reviewCount;
+            const dRevSubEl = document.getElementById('dReviewSub');
+            if (dRevSubEl) dRevSubEl.textContent = `รอผู้แจ้งประเมิน ${reviewCount} งาน`;
 
             const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE) || 1;
             if (currentPage > totalPages) currentPage = totalPages;
@@ -2199,7 +2262,8 @@
             document.getElementById('dKqiDonut').textContent = kqiPct + '%';
             document.getElementById('dCost').textContent = '฿' + totalCost.toLocaleString('th-TH');
             document.getElementById('dCostAvg').textContent = 'เฉลี่ยต่องาน: ฿' + avgCost.toLocaleString('th-TH');
-            document.getElementById('dTotalTicket').textContent = data.length + ' งานเสร็จสมบูรณ์';
+            const dtEl = document.getElementById('dTotalTicket');
+            if (dtEl) dtEl.textContent = data.length + ' งานเสร็จสมบูรณ์';
             document.getElementById('dSatisCount').textContent = `ประเมินแล้ว ${reviewCount} งาน (เฉลี่ย ${avgScore}/5)`;
 
             // ── Department Breakdown Table ──
