@@ -1044,6 +1044,14 @@
                     </svg>
                     เข้าสู่ระบบด้วย LINE (LINE Login)
                 </button>
+
+                <button class="btn btn-outline" style="margin-top:12px;" onclick="bypassLineGate()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    เข้าใช้งานด้วยชื่อผู้ใช้ (Username) โดยตรง
+                </button>
             </div>
 
             <!-- STEPPER -->
@@ -1370,14 +1378,30 @@
 
             try {
                 if (typeof liff !== 'undefined' && liff.login) {
-                    liff.login({ redirectUri: window.location.href });
+                    liff.login();
                 } else {
-                    // Fallback to LIFF direct URL
                     window.location.href = `https://liff.line.me/${LIFF_ID}`;
                 }
             } catch (e) {
                 window.location.href = `https://liff.line.me/${LIFF_ID}`;
             }
+        }
+
+        function bypassLineGate() {
+            // Allow user to proceed with manual username search
+            const gate = document.getElementById('lineGateScreen');
+            if (gate) gate.classList.remove('show');
+
+            const stepBar = document.getElementById('stepBar');
+            if (stepBar) stepBar.style.display = 'flex';
+
+            const sec1 = document.getElementById('sec1');
+            if (sec1) {
+                sec1.style.display = 'block';
+                sec1.classList.add('active');
+            }
+
+            lineUid = 'U_WEB_' + Date.now();
         }
 
         async function checkAutoLogin() {
