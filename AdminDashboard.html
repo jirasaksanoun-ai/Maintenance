@@ -1062,6 +1062,390 @@
             color: var(--c-text);
         }
 
+        /* ── DESKTOP VS MOBILE DISPLAY HELPERS ── */
+        .desktop-only {
+            display: block;
+        }
+
+        .mobile-only {
+            display: none !important;
+        }
+
+        /* ── MOBILE TICKET CARDS STYLING ── */
+        .mobile-ticket-list {
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .mobile-ticket-card {
+            background: #FFFFFF;
+            border: 1px solid var(--c-border);
+            border-radius: var(--radius-lg);
+            padding: 14px 16px;
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            position: relative;
+        }
+
+        .mobile-ticket-card:active {
+            background: #F8FAFC;
+            transform: scale(0.99);
+        }
+
+        .mcard-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .mcard-id-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mcard-date {
+            font-size: 0.78rem;
+            color: var(--c-text-muted);
+            font-weight: 500;
+        }
+
+        .mcard-content {
+            padding: 6px 0 10px;
+            border-bottom: 1px solid #F1F5F9;
+            margin-bottom: 10px;
+        }
+
+        .mcard-user {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.88rem;
+            color: var(--c-text);
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+        }
+
+        .mcard-dept {
+            font-size: 0.75rem;
+            color: var(--c-text-secondary);
+            background: #F1F5F9;
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+        }
+
+        .mcard-issue {
+            font-size: 0.85rem;
+            color: var(--c-text-secondary);
+            line-height: 1.45;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .mcard-bottom {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-mcard {
+            flex: 1;
+            padding: 9px 12px;
+            border-radius: var(--radius-md);
+            font-family: 'Kanit', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.15s ease;
+        }
+
+        .btn-mcard-view {
+            background: #F8FAFC;
+            color: var(--c-text-secondary);
+            border-color: var(--c-border);
+        }
+
+        .btn-mcard-view:hover {
+            background: #F1F5F9;
+            color: var(--c-text);
+        }
+
+        .btn-mcard-accept {
+            background: var(--c-primary-light);
+            color: var(--c-primary);
+            border-color: #BFDBFE;
+        }
+
+        .btn-mcard-accept:hover {
+            background: var(--c-primary);
+            color: #FFFFFF;
+        }
+
+        .btn-mcard-close {
+            background: var(--c-success-light);
+            color: var(--c-success);
+            border-color: #A7F3D0;
+        }
+
+        .btn-mcard-close:hover {
+            background: var(--c-success);
+            color: #FFFFFF;
+        }
+
+        .mobile-empty-state {
+            text-align: center;
+            padding: 36px 16px;
+            color: var(--c-text-muted);
+            font-size: 0.9rem;
+            background: #FFFFFF;
+            border: 1px dashed var(--c-border);
+            border-radius: var(--radius-lg);
+        }
+
+        /* ── RESPONSIVE MOBILE MEDIA QUERIES (<= 768px) ── */
+        @media (max-width: 768px) {
+            .desktop-only {
+                display: none !important;
+            }
+
+            .mobile-only {
+                display: flex !important;
+            }
+
+            /* ── Top Navbar ── */
+            .nav-inner {
+                padding: 10px 14px;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+
+            .brand-logo {
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
+                border-radius: 8px;
+            }
+
+            .brand-title {
+                font-size: 0.95rem;
+            }
+
+            .brand-sub {
+                display: none;
+            }
+
+            .nav-actions {
+                gap: 6px;
+            }
+
+            .site-badge {
+                padding: 4px 10px;
+                font-size: 0.75rem;
+            }
+
+            .btn-nav-action {
+                padding: 6px 10px;
+                font-size: 0.78rem;
+                gap: 4px;
+            }
+
+            /* ── Dashboard Content ── */
+            .dashboard-content {
+                padding: 14px 12px;
+                gap: 16px;
+            }
+
+            /* ── KPI Grid on Mobile: Clean 2-Column Grid ── */
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .kpi-card {
+                padding: 12px 14px;
+                border-radius: 14px;
+                gap: 10px;
+            }
+
+            .kpi-icon-wrap {
+                width: 38px;
+                height: 38px;
+                font-size: 18px;
+                border-radius: 10px;
+            }
+
+            .kpi-value {
+                font-size: 1.35rem;
+            }
+
+            .kpi-label {
+                font-size: 0.78rem;
+                margin-top: 1px;
+            }
+
+            .kpi-sub {
+                display: none;
+            }
+
+            /* ── Analytics & KQI ── */
+            .analytics-card {
+                padding: 16px 14px;
+                border-radius: 16px;
+            }
+
+            .filter-toolbar {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+                width: 100%;
+            }
+
+            .filter-toolbar select {
+                width: 100%;
+                font-size: 0.82rem;
+                padding: 8px 10px;
+            }
+
+            #kDept {
+                grid-column: span 2;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+                margin-top: 14px;
+            }
+
+            .chart-box {
+                padding: 14px;
+                border-radius: 14px;
+            }
+
+            .chart-wrapper {
+                height: 220px;
+            }
+
+            .donut-center-val {
+                font-size: 1.5rem;
+            }
+
+            .donut-center-sub {
+                font-size: 0.7rem;
+            }
+
+            .dept-summary-wrap {
+                margin-top: 14px;
+                padding: 14px;
+                border-radius: 14px;
+            }
+
+            .dept-table th, .dept-table td {
+                padding: 8px 6px;
+                font-size: 0.82rem;
+            }
+
+            /* ── Tickets Management ── */
+            .tickets-card {
+                padding: 16px 14px;
+                border-radius: 16px;
+            }
+
+            .section-header {
+                margin-bottom: 12px;
+            }
+
+            .section-title {
+                font-size: 1.1rem;
+            }
+
+            .table-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                width: 100%;
+                margin-bottom: 14px;
+            }
+
+            .search-box {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .search-input {
+                font-size: 0.88rem;
+                padding: 10px 14px 10px 38px;
+            }
+
+            #filterStatus {
+                width: 100%;
+                font-size: 0.88rem;
+            }
+
+            .pagination-bar {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .pagination-btns {
+                width: 100%;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .btn-page {
+                flex: 1;
+                text-align: center;
+                padding: 8px 16px;
+            }
+
+            /* ── Modals on Mobile ── */
+            .modal-backdrop {
+                padding: 10px;
+                align-items: flex-end;
+            }
+
+            .modal-dialog {
+                border-radius: 20px 20px 14px 14px;
+                padding: 20px 16px;
+                max-height: 88vh;
+                margin: 0;
+            }
+
+            .modal-title {
+                font-size: 1.1rem;
+            }
+
+            .form-control {
+                font-size: 16px; /* Prevents auto-zoom in iOS */
+            }
+
+            .btn-modal {
+                flex: 1;
+                padding: 12px 14px;
+            }
+
+            /* ── Toast on Mobile ── */
+            .toast-popup {
+                bottom: 16px;
+                right: 16px;
+                left: 16px;
+                justify-content: center;
+                padding: 12px 16px;
+            }
+        }
+
         /* ── HIDDEN COMPATIBILITY CONTAINERS ── */
         .tab-view, .nav-item {
             display: none !important;
@@ -1322,8 +1706,8 @@
                     </div>
                 </div>
 
-                <!-- Table Content -->
-                <div class="table-responsive">
+                <!-- Table Content (Desktop View) -->
+                <div class="table-responsive desktop-only">
                     <table class="data-table">
                         <thead>
                             <tr>
@@ -1339,6 +1723,11 @@
                             <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--c-text-muted);">กำลังโหลดข้อมูล...</td></tr>
                         </tbody>
                     </table>
+                </div>
+
+                <!-- Mobile Ticket Cards (Mobile View) -->
+                <div class="mobile-ticket-list mobile-only" id="mobileTicketList">
+                    <div style="text-align:center;padding:32px;color:var(--c-text-muted);">กำลังโหลดข้อมูล...</div>
                 </div>
 
                 <!-- Pagination -->
@@ -1597,40 +1986,98 @@
             document.getElementById('btnNext').disabled = currentPage === totalPages;
 
             const tbody = document.getElementById('ticketTable');
-            tbody.innerHTML = paginated.map(t => {
-                const s = t['Status'];
-                let badgeClass = 'badge-open';
-                let badgeText = s;
-                if (s === 'Open') { badgeClass = 'badge-open'; badgeText = 'รอรับงาน'; }
-                else if (s === 'In Progress') { badgeClass = 'badge-inprogress'; badgeText = 'กำลังซ่อม'; }
-                else if (s === 'Waiting for Review') { badgeClass = 'badge-waiting'; badgeText = 'รอประเมิน'; }
-                else if (s === 'Completed') { badgeClass = 'badge-completed'; badgeText = 'เสร็จสิ้น'; }
+            if (tbody) {
+                tbody.innerHTML = paginated.map(t => {
+                    const s = t['Status'];
+                    let badgeClass = 'badge-open';
+                    let badgeText = s;
+                    if (s === 'Open') { badgeClass = 'badge-open'; badgeText = 'รอรับงาน'; }
+                    else if (s === 'In Progress') { badgeClass = 'badge-inprogress'; badgeText = 'กำลังซ่อม'; }
+                    else if (s === 'Waiting for Review') { badgeClass = 'badge-waiting'; badgeText = 'รอประเมิน'; }
+                    else if (s === 'Completed') { badgeClass = 'badge-completed'; badgeText = 'เสร็จสิ้น'; }
 
-                const badge = `<span class="status-badge ${badgeClass}">${badgeText}</span>`;
+                    const badge = `<span class="status-badge ${badgeClass}">${badgeText}</span>`;
 
-                let actions = `<button class="btn-table-action btn-view" onclick="showDetail('${t['Ticket_ID']}')">รายละเอียด</button>`;
-                if (s === 'Open') actions += `<button class="btn-table-action btn-accept" onclick="openAccept('${t['Ticket_ID']}')">รับงาน</button>`;
-                if (s === 'In Progress') actions += `<button class="btn-table-action btn-close" onclick="openClose('${t['Ticket_ID']}')">ปิดงาน</button>`;
+                    let actions = `<button class="btn-table-action btn-view" onclick="showDetail('${t['Ticket_ID']}')">รายละเอียด</button>`;
+                    if (s === 'Open') actions += `<button class="btn-table-action btn-accept" onclick="openAccept('${t['Ticket_ID']}')">รับงาน</button>`;
+                    if (s === 'In Progress') actions += `<button class="btn-table-action btn-close" onclick="openClose('${t['Ticket_ID']}')">ปิดงาน</button>`;
 
-                const dt = new Date(t['Created_Date']);
-                const dateStr = isNaN(dt) ? '—' : dt.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
+                    const dt = new Date(t['Created_Date']);
+                    const dateStr = isNaN(dt) ? '—' : dt.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
 
-                return `<tr>
-                    <td><span class="ticket-id-pill">${t['Ticket_ID']}</span></td>
-                    <td style="color:var(--c-text-secondary);font-size:0.85rem;">${dateStr}</td>
-                    <td>
-                        <div style="font-weight:600;color:var(--c-text);">${t['User_Name'] || '—'}</div>
-                        <div style="font-size:0.8rem;color:var(--c-text-muted);">${t['Department'] || '—'}</div>
-                    </td>
-                    <td style="max-width:240px;color:var(--c-text-secondary);font-size:0.85rem;">
-                        ${(t['Issue'] || '—').substring(0, 55)}${(t['Issue'] || '').length > 55 ? '...' : ''}
-                    </td>
-                    <td>${badge}</td>
-                    <td style="text-align:right;">
-                        <div class="action-group" style="justify-content:flex-end;">${actions}</div>
-                    </td>
-                </tr>`;
-            }).join('') || '<tr><td colspan="6" style="text-align:center;padding:36px;color:var(--c-text-muted);">ไม่พบข้อมูลที่ตรงกับการค้นหา</td></tr>';
+                    return `<tr>
+                        <td><span class="ticket-id-pill">${t['Ticket_ID']}</span></td>
+                        <td style="color:var(--c-text-secondary);font-size:0.85rem;">${dateStr}</td>
+                        <td>
+                            <div style="font-weight:600;color:var(--c-text);">${t['User_Name'] || '—'}</div>
+                            <div style="font-size:0.8rem;color:var(--c-text-muted);">${t['Department'] || '—'}</div>
+                        </td>
+                        <td style="max-width:240px;color:var(--c-text-secondary);font-size:0.85rem;">
+                            ${(t['Issue'] || '—').substring(0, 55)}${(t['Issue'] || '').length > 55 ? '...' : ''}
+                        </td>
+                        <td>${badge}</td>
+                        <td style="text-align:right;">
+                            <div class="action-group" style="justify-content:flex-end;">${actions}</div>
+                        </td>
+                    </tr>`;
+                }).join('') || '<tr><td colspan="6" style="text-align:center;padding:36px;color:var(--c-text-muted);">ไม่พบข้อมูลที่ตรงกับการค้นหา</td></tr>';
+            }
+
+            // Render Mobile Cards View
+            const mobileList = document.getElementById('mobileTicketList');
+            if (mobileList) {
+                if (paginated.length === 0) {
+                    mobileList.innerHTML = '<div class="mobile-empty-state">📭 ไม่พบข้อมูลที่ตรงกับการค้นหา</div>';
+                } else {
+                    mobileList.innerHTML = paginated.map(t => {
+                        const s = t['Status'];
+                        let badgeClass = 'badge-open';
+                        let badgeText = s;
+                        if (s === 'Open') { badgeClass = 'badge-open'; badgeText = 'รอรับงาน'; }
+                        else if (s === 'In Progress') { badgeClass = 'badge-inprogress'; badgeText = 'กำลังซ่อม'; }
+                        else if (s === 'Waiting for Review') { badgeClass = 'badge-waiting'; badgeText = 'รอประเมิน'; }
+                        else if (s === 'Completed') { badgeClass = 'badge-completed'; badgeText = 'เสร็จสิ้น'; }
+
+                        let quickActions = '';
+                        if (s === 'Open') {
+                            quickActions = `<button class="btn-mcard btn-mcard-accept" onclick="event.stopPropagation(); openAccept('${t['Ticket_ID']}')">👨‍🔧 รับงาน</button>`;
+                        } else if (s === 'In Progress') {
+                            quickActions = `<button class="btn-mcard btn-mcard-close" onclick="event.stopPropagation(); openClose('${t['Ticket_ID']}')">✅ ปิดงาน</button>`;
+                        }
+
+                        const dt = new Date(t['Created_Date']);
+                        const dateStr = isNaN(dt) ? '—' : dt.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
+
+                        return `
+                        <div class="mobile-ticket-card" onclick="showDetail('${t['Ticket_ID']}')">
+                            <div class="mcard-top">
+                                <div class="mcard-id-row">
+                                    <span class="ticket-id-pill">${t['Ticket_ID']}</span>
+                                    <span class="mcard-date">${dateStr}</span>
+                                </div>
+                                <span class="status-badge ${badgeClass}">${badgeText}</span>
+                            </div>
+                            <div class="mcard-content">
+                                <div class="mcard-user">
+                                    <span>👤</span>
+                                    <strong>${t['User_Name'] || '—'}</strong>
+                                    <span class="mcard-dept">${t['Department'] || '—'}</span>
+                                </div>
+                                <div class="mcard-issue">
+                                    ${(t['Issue'] || '—').substring(0, 65)}${(t['Issue'] || '').length > 65 ? '...' : ''}
+                                </div>
+                            </div>
+                            <div class="mcard-bottom" onclick="event.stopPropagation()">
+                                <button class="btn-mcard btn-mcard-view" onclick="showDetail('${t['Ticket_ID']}')">
+                                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.8"/><path d="M8 7v4M8 5v.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                                    ดูรายละเอียด
+                                </button>
+                                ${quickActions}
+                            </div>
+                        </div>`;
+                    }).join('');
+                }
+            }
         }
 
         function changePage(dir) {
