@@ -50,10 +50,11 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: 'Kanit', sans-serif !important;
         }
 
         body {
-            font-family: 'Sarabun', sans-serif;
+            font-family: 'Kanit', sans-serif !important;
             background: var(--c-bg);
             color: var(--c-text);
             min-height: 100vh;
@@ -802,7 +803,7 @@
 
             <!-- LIFF Warning -->
             <div class="alert alert-warning" id="alertLiffError" style="display:none;">
-                <span>⚠️</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                 <span>ไม่ได้เปิดผ่าน LINE โดยตรง แต่ท่านยังสามารถแจ้งซ่อมได้ตามปกติ</span>
             </div>
 
@@ -827,7 +828,9 @@
             <!-- SEC 1: ค้นหาพนักงาน / ยืนยันตัวตน -->
             <div class="form-section active" id="sec1">
                 <div class="section-head">
-                    <div class="section-icon">🔍</div>
+                    <div class="section-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--c-primary)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </div>
                     <div>
                         <h3>ข้อมูลผู้แจ้งซ่อม</h3>
                         <p id="sec1Subtitle">กรุณากรอก Username ของคุณ</p>
@@ -837,7 +840,7 @@
                 <!-- Alert welcome LINE OA -->
                 <div class="alert" id="alertLineOALogin"
                     style="display:none;background:var(--c-success-light);border:1px solid #A7F3D0;color:var(--c-success);">
-                    <span>🟢</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
                     <span>เข้าสู่ระบบอัตโนมัติผ่าน LINE OA เรียบร้อยแล้ว</span>
                 </div>
 
@@ -899,7 +902,9 @@
             <!-- SEC 2: รายละเอียดการแจ้งซ่อม -->
             <div class="form-section" id="sec2">
                 <div class="section-head">
-                    <div class="section-icon">🔧</div>
+                    <div class="section-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--c-primary)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                    </div>
                     <div>
                         <h3>รายละเอียดปัญหา</h3>
                         <p>ระบุปัญหาและอาการที่พบอย่างละเอียด</p>
@@ -928,13 +933,17 @@
                 <div class="field-group">
                     <label>รูปภาพประกอบ (ถ้ามี)</label>
                     <div class="upload-box" id="uploadBox" onclick="document.getElementById('imgInput').click()">
-                        <div class="upload-icon">📸</div>
+                        <div class="upload-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--c-text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                        </div>
                         <p>แตะเพื่อถ่ายรูปหรือเลือกรูปถ่าย</p>
                         <span>รองรับ .jpg, .png ขนาดไม่เกิน 5MB</span>
                         <input type="file" id="imgInput" accept="image/*" onchange="previewImg(this)">
                     </div>
                     <div class="upload-preview" id="preview">
-                        <button class="remove-img" onclick="removeImg()">✕</button>
+                        <button class="remove-img" onclick="removeImg()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                        </button>
                         <img id="previewImg" src="" alt="พรีวิวรูปภาพ">
                     </div>
                 </div>
@@ -950,7 +959,9 @@
             <!-- SEC 3: ยืนยันข้อมูล -->
             <div class="form-section" id="sec3">
                 <div class="section-head">
-                    <div class="section-icon">📋</div>
+                    <div class="section-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--c-primary)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                    </div>
                     <div>
                         <h3>ตรวจสอบและยืนยัน</h3>
                         <p>ตรวจสอบความถูกต้องของข้อมูลก่อนส่ง</p>
@@ -959,7 +970,7 @@
 
                 <div class="confirm-card" id="confirmCard">
                     <div class="confirm-header">
-                        <span>👤</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                         <h4>สรุปข้อมูลการแจ้งซ่อม</h4>
                     </div>
                     <div class="confirm-body">
@@ -997,8 +1008,10 @@
 
             <!-- SUCCESS SCREEN -->
             <div class="success-screen" id="successScreen">
-                <div class="success-ring">✓</div>
-                <h2>ส่งเรื่องแจ้งซ่อมสำเร็จ!</h2>
+                <div class="success-ring">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                </div>
+                <h2>ส่งเรื่องแจ้งซ่อมสำเร็จ</h2>
                 <p>ระบบได้รับข้อมูลเรียบร้อยแล้ว ทีมช่างจะติดต่อกลับและแจ้งเตือนสถานะผ่าน LINE</p>
 
                 <div class="ticket-wrap">
@@ -1091,7 +1104,7 @@
 
         async function searchUser() {
             const id = document.getElementById('inputId').value.trim();
-            if (!id) return showAlert('alertSearch', '⚠️ กรุณาระบุ Username');
+            if (!id) return showAlert('alertSearch', 'กรุณาระบุชื่อผู้ใช้งาน (Username)');
 
             const btn = document.querySelector('#sec1 .search-row .btn');
             btn.innerHTML = '<div class="mini-loader"></div>';
@@ -1114,12 +1127,12 @@
                     document.getElementById('nextBtn1').style.display = 'flex';
                     document.getElementById('alertSearch').classList.remove('show');
                 } else {
-                    showAlert('alertSearch', '✕ ไม่พบข้อมูลผู้ใช้งาน กรุณาตรวจสอบ Username อีกครั้ง');
+                    showAlert('alertSearch', 'ไม่พบข้อมูลผู้ใช้งาน กรุณาตรวจสอบ Username อีกครั้ง');
                     document.getElementById('infoCard').classList.remove('show');
                     document.getElementById('nextBtn1').style.display = 'none';
                 }
             } catch (err) {
-                showAlert('alertSearch', '⚠️ ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณาลองใหม่');
+                showAlert('alertSearch', 'ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณาลองใหม่อีกครั้ง');
             }
 
             btn.innerHTML = 'ค้นหา';
@@ -1136,7 +1149,7 @@
             if (n === 2 && !userData) return;
             if (n === 3) {
                 const issue = document.getElementById('selIssue').value;
-                if (!issue) return showAlert('alertForm', '⚠️ กรุณาเลือกประเภทปัญหาก่อนดำเนินการต่อ');
+                if (!issue) return showAlert('alertForm', 'กรุณาเลือกประเภทปัญหาก่อนดำเนินการต่อ');
                 document.getElementById('alertForm').classList.remove('show');
                 document.getElementById('cName').textContent = userData.firstName + ' ' + userData.lastName;
                 document.getElementById('cDept').textContent = userData.department;
@@ -1214,12 +1227,12 @@
                     document.getElementById('ticketDisplay').textContent = res.ticketId;
                     document.getElementById('successScreen').classList.add('show');
                 } else {
-                    showAlert('alertSubmit', '✕ เกิดข้อผิดพลาด: ' + (res.error || 'ไม่สามารถส่งเรื่องได้'));
+                    showAlert('alertSubmit', 'เกิดข้อผิดพลาด: ' + (res.error || 'ไม่สามารถส่งเรื่องได้'));
                     btn.disabled = false;
                     btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> ยืนยันส่งเรื่อง';
                 }
             } catch (err) {
-                showAlert('alertSubmit', '⚠️ การเชื่อมต่อขัดข้อง กรุณาลองใหม่อีกครั้ง');
+                showAlert('alertSubmit', 'การเชื่อมต่อขัดข้อง กรุณาลองใหม่อีกครั้ง');
                 btn.disabled = false;
                 btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> ยืนยันส่งเรื่อง';
             }
@@ -1227,7 +1240,7 @@
 
         async function sendHistory() {
             if (!userData || !lineUid || lineUid.startsWith('U_DEV_')) {
-                showHistoryStatus('info', '⚠️ ฟังก์ชันนี้ใช้งานได้เฉพาะใน LINE เท่านั้น');
+                showHistoryStatus('info', 'ฟังก์ชันนี้ใช้งานได้เฉพาะในแอปพลิเคชัน LINE เท่านั้น');
                 return;
             }
 
@@ -1248,16 +1261,16 @@
 
                 if (json.success) {
                     if (json.count === 0) {
-                        showHistoryStatus('empty', '📭 ยังไม่มีประวัติการแจ้งซ่อมของคุณ');
+                        showHistoryStatus('empty', 'ยังไม่มีประวัติการแจ้งซ่อมในระบบ');
                     } else {
-                        showHistoryStatus('success', `✅ ส่งประวัติ ${json.count} รายการไปยังห้องแชท LINE แล้ว`);
+                        showHistoryStatus('success', `ส่งข้อมูลประวัติการแจ้งซ่อมจำนวน ${json.count} รายการไปยังห้องแชท LINE เรียบร้อยแล้ว`);
                     }
                 } else {
-                    showHistoryStatus('error', '✕ เกิดข้อผิดพลาด: ' + json.error);
+                    showHistoryStatus('error', 'เกิดข้อผิดพลาด: ' + json.error);
                 }
             } catch (err) {
                 document.getElementById('historyLoading').style.display = 'none';
-                showHistoryStatus('error', '⚠️ ไม่สามารถเชื่อมต่อได้ กรุณาลองใหม่อีกครั้ง');
+                showHistoryStatus('error', 'ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณาลองใหม่อีกครั้ง');
             }
 
             btn.disabled = false;
